@@ -15,5 +15,6 @@ public class Imovel {
     private String bairro;
     private String logradouro;
     private String tipoImovel;
+    private String municipio;
 
 }

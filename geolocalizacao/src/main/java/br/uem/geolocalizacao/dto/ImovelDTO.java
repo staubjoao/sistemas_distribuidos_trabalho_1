@@ -1,4 +1,4 @@
-package br.uem.arboviroses.dto;
+package br.uem.geolocalizacao.dto;
 
 import lombok.Data;
 
@@ -12,6 +12,5 @@ public class ImovelDTO {
     private String bairro;
     private String logradouro;
     private String tipoImovel;
-    private String municipio;
 
 }
