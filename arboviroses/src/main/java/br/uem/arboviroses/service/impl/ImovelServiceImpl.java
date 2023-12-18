@@ -22,18 +22,7 @@ public class ImovelServiceImpl implements ImovelService {
 
     @Override
     public List<Imovel> getlAll() {
-        return repository.findAll();
+        return repository.getAll();
     }
 
-    @Override
-    public Imovel getById(Integer id) {
-        return repository.getById(id);
-    }
-
-    @Override
-    public Imovel deleteById(Integer id) {
-        Imovel imovel = repository.getById(id);
-        repository.delete(repository.getById(id));
-        return imovel;
-    }
 }

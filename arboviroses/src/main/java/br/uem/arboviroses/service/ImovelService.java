@@ -14,8 +14,4 @@ public interface ImovelService {
 
     List<Imovel> getlAll();
 
-    Imovel getById(Integer id);
-
-    Imovel deleteById(Integer id);
-
 }
