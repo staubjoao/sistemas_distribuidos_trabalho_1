@@ -1,6 +1,5 @@
 package br.uem.arboviroses.model;
 
-import jakarta.persistence.*;
 import lombok.Data;
 
 @Data

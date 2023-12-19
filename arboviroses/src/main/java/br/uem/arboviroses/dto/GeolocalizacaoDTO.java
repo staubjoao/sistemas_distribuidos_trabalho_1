@@ -1,10 +1,10 @@
-package br.uem.arboviroses.model;
+package br.uem.arboviroses.dto;
 
 
 import lombok.Data;
 
 @Data
-public class Geolocalizacao {
+public class GeolocalizacaoDTO {
 
     private String latitude;
     private String longitude;

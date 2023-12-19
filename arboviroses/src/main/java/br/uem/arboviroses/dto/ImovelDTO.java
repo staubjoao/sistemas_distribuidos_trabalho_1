@@ -5,7 +5,6 @@ import lombok.Data;
 @Data
 public class ImovelDTO {
 
-    private Integer id;
     private String localidade;
     private String numero;
     private String complemento;

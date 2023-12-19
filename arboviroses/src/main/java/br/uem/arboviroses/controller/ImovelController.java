@@ -1,14 +1,17 @@
 package br.uem.arboviroses.controller;
 
+import br.uem.arboviroses.dto.GeolocalizacaoDTO;
 import br.uem.arboviroses.model.*;
 import br.uem.arboviroses.service.impl.*;
 import jakarta.validation.constraints.NotNull;
+import okhttp3.OkHttpClient;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -20,14 +23,14 @@ public class ImovelController {
     @Autowired
     private ImovelServiceImpl service;
 
+    private final OkHttpClient httpClient = new OkHttpClient();
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     private Imovel post(@RequestBody Imovel imovelDTO) {
         String urlGeolocalizacao = "http://localhost:8081/api/geolocalizacao";
 
         Imovel imovel = new Imovel();
-
-        imovel.setId(imovelDTO.getId());
         imovel.setNumero(imovelDTO.getNumero());
         imovel.setComplemento(imovelDTO.getComplemento());
         imovel.setBairro(imovelDTO.getBairro());
@@ -38,14 +41,20 @@ public class ImovelController {
 
         String query = getString(imovel);
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(urlGeolocalizacao)
-                .queryParam("query", query);
+        String urlWithQuery = urlGeolocalizacao + "?query=" + query;
 
         RestTemplate restTemplate = new RestTemplate();
-        Geolocalizacao response = restTemplate.getForObject(builder.toUriString(), Geolocalizacao.class);
 
-        imovel.setLatitude(response.getLatitude());
-        imovel.setLongitude(response.getLongitude());
+        ResponseEntity<GeolocalizacaoDTO> response = restTemplate.getForEntity(urlWithQuery, GeolocalizacaoDTO.class);
+
+        GeolocalizacaoDTO geolocalizacao = response.getBody();
+
+        if (geolocalizacao != null) {
+            imovel.setLongitude(geolocalizacao.getLongitude());
+            imovel.setLatitude(geolocalizacao.getLatitude());
+        } else {
+            System.out.println("Erro ao obter geolocalização");
+        }
 
         return service.salvar(imovel);
     }
