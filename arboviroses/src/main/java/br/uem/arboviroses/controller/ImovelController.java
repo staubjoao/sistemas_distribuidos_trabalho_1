@@ -3,13 +3,10 @@ package br.uem.arboviroses.controller;
 import br.uem.arboviroses.model.*;
 import br.uem.arboviroses.service.impl.*;
 import jakarta.validation.constraints.NotNull;
-import okhttp3.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -26,8 +23,7 @@ public class ImovelController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     private Imovel post(@RequestBody Imovel imovelDTO) {
-
-        String urlGeolocalizacao = "http://localhost:8080/api/geolocalizacao";
+        String urlGeolocalizacao = "http://localhost:8081/api/geolocalizacao";
 
         Imovel imovel = new Imovel();
 
@@ -38,13 +34,12 @@ public class ImovelController {
         imovel.setLogradouro(imovelDTO.getLogradouro());
         imovel.setTipoImovel(imovelDTO.getTipoImovel());
         imovel.setMunicipio(imovelDTO.getMunicipio());
+        imovel.setLocalidade(imovelDTO.getLocalidade());
 
         String query = getString(imovel);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(urlGeolocalizacao)
                 .queryParam("query", query);
-
-        System.out.println(builder.toUriString());
 
         RestTemplate restTemplate = new RestTemplate();
         Geolocalizacao response = restTemplate.getForObject(builder.toUriString(), Geolocalizacao.class);
@@ -63,20 +58,17 @@ public class ImovelController {
 
     @NotNull
     private static String getString(Imovel imovel) {
-        String logradouro = imovel.getLogradouro().toUpperCase();
+        String logradouro = imovel.getLogradouro().toLowerCase();
         String numero = imovel.getNumero();
-        String bairro = imovel.getBairro().toUpperCase();
-        String cidade = imovel.getMunicipio().toUpperCase();
+        String cidade = imovel.getMunicipio().toLowerCase();
 
         return logradouro.replace(" ", "+") +
                 "+" +
                 numero +
                 "+" +
-                bairro.replace(" ", "+") +
-                "+" +
                 cidade.replace(" ", "+") +
                 "+" +
-                "PARANA";
+                "paraná";
     }
 
 }

@@ -32,7 +32,7 @@ public class GeolocalizacaoController {
 
         JSONObject retorno;
         try {
-            retorno = this.searchGeo(query);
+            retorno = this.searchGeo(query.replace(" ", "+"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -52,7 +52,7 @@ public class GeolocalizacaoController {
     @NotNull
     public JSONObject searchGeo(String query) throws IOException {
         Request request = new Request.Builder()
-                .url("https://nominatim.openstreetmap.org/search?format=json&q=" + query)
+                .url("https://nominatim.openstreetmap.org/?q=" + query + "&format=json&limit=1")
                 .build();
 
         try (okhttp3.Response response = httpClient.newCall(request).execute()) {
