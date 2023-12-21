@@ -16,8 +16,7 @@ public class ImovelServiceImpl implements ImovelService {
 
     @Override
     public Imovel salvar(Imovel imovel) {
-        Imovel save = repository.save(imovel);
-        return save;
+        return repository.save(imovel);
     }
 
     @Override

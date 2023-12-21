@@ -4,8 +4,6 @@ import br.uem.arboviroses.dto.GeolocalizacaoDTO;
 import br.uem.arboviroses.model.*;
 import br.uem.arboviroses.service.impl.*;
 import jakarta.validation.constraints.NotNull;
-import okhttp3.OkHttpClient;
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +20,6 @@ public class ImovelController {
 
     @Autowired
     private ImovelServiceImpl service;
-
-    private final OkHttpClient httpClient = new OkHttpClient();
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -67,9 +63,9 @@ public class ImovelController {
 
     @NotNull
     private static String getString(Imovel imovel) {
-        String logradouro = imovel.getLogradouro().toLowerCase();
+        String logradouro = imovel.getLogradouro();
         String numero = imovel.getNumero();
-        String cidade = imovel.getMunicipio().toLowerCase();
+        String cidade = imovel.getMunicipio();
 
         return logradouro.replace(" ", "+") +
                 "+" +

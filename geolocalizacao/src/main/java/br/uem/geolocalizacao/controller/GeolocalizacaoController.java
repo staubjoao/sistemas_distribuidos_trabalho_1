@@ -42,8 +42,8 @@ public class GeolocalizacaoController {
             geolocalizacao.setLatitude(retorno.getString("lat"));
         }
         else {
-            geolocalizacao.setLongitude("Error");
-            geolocalizacao.setLatitude("Error");
+            geolocalizacao.setLongitude("error");
+            geolocalizacao.setLatitude("error");
         }
 
         return geolocalizacao;
@@ -54,6 +54,8 @@ public class GeolocalizacaoController {
         Request request = new Request.Builder()
                 .url("https://nominatim.openstreetmap.org/?q=" + query + "&format=json&limit=1")
                 .build();
+
+        System.out.println(request);
 
         try (okhttp3.Response response = httpClient.newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
